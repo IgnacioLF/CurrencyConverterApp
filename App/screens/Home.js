@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
 	View,
 	StyleSheet,
@@ -16,6 +16,7 @@ import colors from "../constants/colors";
 import { ConversionInput } from "../components/ConversionInput";
 import { Button } from "../components/Button";
 import { KeyboardSpacer } from "../components/KeyboardSpacer";
+import { ConversionContext } from "../utils/ConversionContext";
 
 const screen = Dimensions.get("window");
 
@@ -60,10 +61,11 @@ const styles = StyleSheet.create({
 });
 
 export default ({ navigation }) => {
-	const baseCurrency = "USD";
-	const quoteCurrency = "GBP";
+	const [value, setValue] = useState("100");
 	const conversionRate = 0.8345;
 	const date = new Date();
+	const { baseCurrency, quoteCurrency, swapCurrencies } =
+		useContext(ConversionContext);
 
 	const [scrollEnable, setScrollEnable] = useState(false);
 
@@ -92,23 +94,25 @@ export default ({ navigation }) => {
 					<Text style={styles.textHeader}>Currency Converter</Text>
 					<ConversionInput
 						text={baseCurrency}
-						value="123"
+						value={value}
 						onButtonPress={() =>
 							navigation.push("CurrencyList", {
 								title: "Base Currency",
-								activeCurrency: baseCurrency,
+								isBaseCurrency: true,
 							})
 						}
-						onChangeText={(text) => console.log("text", text)}
+						onChangeText={(text) => setValue(text)}
 						keyboardType="numeric"
 					/>
 					<ConversionInput
 						text={quoteCurrency}
-						value="123"
+						value={
+							value && `${(parseFloat(value) * conversionRate).toFixed(2)}`
+						}
 						onButtonPress={() =>
 							navigation.push("CurrencyList", {
 								title: "Quote Currency",
-								activeCurrency: quoteCurrency,
+								isBaseCurrency: false,
 							})
 						}
 						editable={false}
@@ -119,7 +123,7 @@ export default ({ navigation }) => {
 							"MMM do, yyyy"
 						)}.`}
 					</Text>
-					<Button text="Reverse Currencies" onPress={() => alert("TODO")} />
+					<Button text="Reverse Currencies" onPress={() => swapCurrencies()} />
 					<KeyboardSpacer
 						onToggle={(keyboardIsVisible) => setScrollEnable(keyboardIsVisible)}
 					/>

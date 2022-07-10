@@ -8,11 +8,12 @@ import Home from "../screens/Home";
 import Options from "../screens/Options";
 import CurrencyList from "../screens/CurrencyList";
 import colors from "../constants/colors";
+import { ConversionContextProvider } from "../utils/ConversionContext";
 
 const MainStack = createStackNavigator();
 const MainStackScreen = () => {
 	return (
-		<MainStack.Navigator /* initialRouteName="CurrencyList" */>
+		<MainStack.Navigator>
 			<MainStack.Screen
 				name="Home"
 				component={Home}
@@ -55,7 +56,9 @@ const ModalStackScreen = () => (
 export default () => {
 	return (
 		<NavigationContainer>
-			<ModalStackScreen />
+			<ConversionContextProvider>
+				<ModalStackScreen />
+			</ConversionContextProvider>
 		</NavigationContainer>
 	);
 };
