@@ -5,6 +5,6 @@ module.exports = {
 		"react/jsx-curly-newline": 0,
 		"react/style-prop-object": 0,
 		"react/react-in-jsx-scope": 0,
-		"react/jsx-indent": "off",
+		"react/jsx-indent": "tab",
 	},
 };
