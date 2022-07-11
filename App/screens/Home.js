@@ -18,10 +18,11 @@ import { ConversionInput } from "../components/ConversionInput";
 import { Button } from "../components/Button";
 import { KeyboardSpacer } from "../components/KeyboardSpacer";
 import { ConversionContext } from "../utils/ConversionContext";
+import { ThemeContext } from "../config/Navigation";
 
 const screen = Dimensions.get("window");
 
-const styles = StyleSheet.create({
+const darkStyles = {
 	container: {
 		backgroundColor: colors.blue,
 		flex: 1,
@@ -59,42 +60,81 @@ const styles = StyleSheet.create({
 		marginHorizontal: 20,
 		marginTop: 10,
 	},
-});
+};
+
+const lightStyles = {
+	...darkStyles,
+	container: {
+		...darkStyles.container,
+		backgroundColor: colors.white,
+	},
+	textHeader: {
+		...darkStyles.textHeader,
+		color: colors.blue,
+	},
+	text: {
+		...darkStyles.text,
+		color: colors.blue,
+	},
+};
 
 export default ({ navigation }) => {
 	const [value, setValue] = useState("100");
 	const { baseCurrency, quoteCurrency, swapCurrencies, date, rate, isLoading } =
 		useContext(ConversionContext);
 
+	const { isDarkTheme } = useContext(ThemeContext);
+
 	const [scrollEnable, setScrollEnable] = useState(false);
 
 	const conversionRate = rate;
+	const styles = isDarkTheme
+		? StyleSheet.create(darkStyles)
+		: StyleSheet.create(lightStyles);
 
 	return (
 		<View style={styles.container}>
 			<ScrollView scrollEnabled={scrollEnable}>
-				<StatusBar barStyle="light-content" backgroundColor={colors.blue} />
+				<StatusBar
+					barStyle={isDarkTheme ? "light-content" : "dark-content"}
+					backgroundColor={isDarkTheme ? colors.blue : colors.white}
+				/>
 				<SafeAreaView style={styles.header}>
 					<TouchableOpacity onPress={() => navigation.push("Options")}>
-						<Entypo name="cog" size={32} color={colors.white} />
+						<Entypo
+							name="cog"
+							size={32}
+							color={isDarkTheme ? colors.white : colors.blue}
+						/>
 					</TouchableOpacity>
 				</SafeAreaView>
 				<View style={styles.content}>
 					<View style={styles.logoContainer}>
 						<Image
-							source={require("../assets/images/background.png")}
+							source={
+								isDarkTheme
+									? require("../assets/images/darkTheme/background.png")
+									: require("../assets/images/lightTheme/background.png")
+							}
 							style={styles.logoBackgound}
 							resizeMode="contain"
 						/>
 						<Image
-							source={require("../assets/images/logo.png")}
+							source={
+								isDarkTheme
+									? require("../assets/images/darkTheme/logo.png")
+									: require("../assets/images/lightTheme/logo.png")
+							}
 							style={styles.logo}
 							resizeMode="contain"
 						/>
 					</View>
 					<Text style={styles.textHeader}>Currency Converter</Text>
 					{isLoading ? (
-						<ActivityIndicator color={colors.white} size="large" />
+						<ActivityIndicator
+							color={isDarkTheme ? colors.white : colors.blue}
+							size="large"
+						/>
 					) : (
 						<>
 							<ConversionInput

@@ -22,16 +22,18 @@ export const ConversionContextProvider = ({ children }) => {
 		return api(
 			`https://api.apilayer.com/exchangerates_data/convert?to=${quoteCurrency}&from=${currency}&amount=1`
 		)
-			.then((response) => response.json())
+			.then((response) => {
+				response.json();
+			})
 			.then((result) => {
 				_setBaseCurrency(currency);
 				setDate(format(new Date(), "yyyy-MM-dd"));
 				setRate(result.result);
 				setIsLoading(false);
 			})
-			.catch((error) =>
-				Alert.alert("Sorry something went wrong", error.message)
-			)
+			.catch((error) => {
+				Alert.alert("Sorry something went wrong", error.message);
+			})
 			.finally(() => {
 				setIsLoading(false);
 			});

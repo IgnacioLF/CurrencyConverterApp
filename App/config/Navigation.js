@@ -1,5 +1,9 @@
-import React from "react";
-import { NavigationContainer } from "@react-navigation/native";
+import React, { createContext, useState } from "react";
+import {
+	NavigationContainer,
+	DarkTheme,
+	DefaultTheme,
+} from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { TouchableOpacity } from "react-native";
 import { Entypo } from "@expo/vector-icons";
@@ -9,6 +13,15 @@ import Options from "../screens/Options";
 import CurrencyList from "../screens/CurrencyList";
 import colors from "../constants/colors";
 import { ConversionContextProvider } from "../utils/ConversionContext";
+
+const myDarkTheme = {
+	...DarkTheme,
+	colors: {
+		primary: colors.white,
+		backgound: colors.blue,
+		card: colors.blue,
+	},
+};
 
 const MainStack = createStackNavigator();
 const MainStackScreen = () => {
@@ -43,7 +56,7 @@ const ModalStackScreen = () => (
 						<Entypo
 							name="cross"
 							size={30}
-							color={colors.blue}
+							color={colors.red}
 							style={{ paddingHorizontal: 10 }}
 						/>
 					</TouchableOpacity>
@@ -53,12 +66,19 @@ const ModalStackScreen = () => (
 	</ModalStack.Navigator>
 );
 
+export const ThemeContext = createContext();
+
 export default () => {
+	const [isDarkTheme, setIsDarkTheme] = useState(true);
+
+	const themeData = { isDarkTheme, setIsDarkTheme };
 	return (
-		<NavigationContainer>
-			<ConversionContextProvider>
-				<ModalStackScreen />
-			</ConversionContextProvider>
-		</NavigationContainer>
+		<ThemeContext.Provider value={themeData}>
+			<NavigationContainer theme={isDarkTheme ? myDarkTheme : DefaultTheme}>
+				<ConversionContextProvider>
+					<ModalStackScreen />
+				</ConversionContextProvider>
+			</NavigationContainer>
+		</ThemeContext.Provider>
 	);
 };
