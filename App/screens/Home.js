@@ -84,7 +84,6 @@ export default ({ navigation }) => {
 		useContext(ConversionContext);
 
 	const { isDarkTheme } = useContext(ThemeContext);
-
 	const [scrollEnable, setScrollEnable] = useState(false);
 
 	const conversionRate = rate;

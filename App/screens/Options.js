@@ -1,20 +1,14 @@
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 import {
 	View,
-	TouchableOpacity,
 	Text,
 	SafeAreaView,
 	StyleSheet,
 	ScrollView,
-	Linking,
-	Alert,
 	StatusBar,
 	Switch,
 } from "react-native";
-import { Entypo } from "@expo/vector-icons";
 import colors from "../constants/colors";
-import { RowItem } from "../components/RowItem";
-import { ConversionContext } from "../utils/ConversionContext";
 import { ThemeContext } from "../config/Navigation";
 
 const styles = StyleSheet.create({
